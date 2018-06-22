@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+--><!-- Layout for the editor -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/customMargin"
+    tools:context=".EditorActivity">
+
+    <!-- Name category -->
+    <LinearLayout
+        android:id="@+id/container_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="Product Name" />
+
+        <!-- Weight field -->
+        <EditText
+            android:id="@+id/edit_name"
+            style="@style/EditorFieldStyle"
+            android:hint="Headphones"
+            android:layout_marginLeft="@dimen/customHalfMargin"
+            android:paddingRight="@dimen/customMargin"
+            android:layout_marginStart="@dimen/customHalfMargin"
+            android:paddingEnd="@dimen/customMargin" />
+    </LinearLayout>
+
+    <!-- Price category -->
+    <LinearLayout
+        android:id="@+id/container_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="Price" />
+
+        <!-- Price field -->
+        <EditText
+            android:id="@+id/edit_price"
+            style="@style/EditorFieldStyle"
+            android:hint="30"
+            android:layout_marginLeft="@dimen/customHalfMargin"
+            android:paddingRight="@dimen/customMargin"
+            android:layout_marginStart="@dimen/customHalfMargin"
+            android:inputType="number"
+            android:paddingEnd="@dimen/customMargin" />
+    </LinearLayout>
+
+    <!-- Quantity category -->
+    <LinearLayout
+        android:id="@+id/container_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text=" Quantity" />
+
+        <!-- Input field -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Quantity drop-down spinner -->
+            <Spinner
+                android:id="@+id/spinner_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:paddingRight="@dimen/customMargin"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Supplier Name -->
+    <LinearLayout
+        android:id="@+id/container_supplier_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="Supplier Name" />
+
+        <!-- Name field -->
+        <EditText
+            android:id="@+id/edit_supplier_name"
+            style="@style/EditorFieldStyle"
+            android:hint="Bosco"
+            android:layout_marginLeft="@dimen/customHalfMargin"
+            android:paddingRight="@dimen/customMargin"
+            android:layout_marginStart="@dimen/customHalfMargin"
+            android:inputType="text"
+            android:paddingEnd="@dimen/customMargin" />
+    </LinearLayout>
+
+    <!-- Supplier Phone Number category -->
+    <LinearLayout
+        android:id="@+id/container_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="Phone Number" />
+
+        <!-- Price field -->
+        <EditText
+            android:id="@+id/edit_phone_number"
+            style="@style/EditorFieldStyle"
+            android:hint="+49 123456789"
+            android:layout_marginLeft="@dimen/customHalfMargin"
+            android:paddingRight="@dimen/customMargin"
+            android:layout_marginStart="@dimen/customHalfMargin"
+            android:inputType="phone"
+            android:paddingEnd="@dimen/customMargin" />
+    </LinearLayout>
+
+</LinearLayout>

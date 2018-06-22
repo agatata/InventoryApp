@@ -1,0 +1,8 @@
+
+<resources>
+    <!-- Custom margins -->
+    <dimen name="customMargin">16dp</dimen>
+    <dimen name="customHalfMargin">16dp</dimen>
+
+</resources>
+
