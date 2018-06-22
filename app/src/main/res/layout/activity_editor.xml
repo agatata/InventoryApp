@@ -33,11 +33,11 @@
         <EditText
             android:id="@+id/edit_name"
             style="@style/EditorFieldStyle"
-            android:hint="Headphones"
             android:layout_marginLeft="@dimen/customHalfMargin"
-            android:paddingRight="@dimen/customMargin"
             android:layout_marginStart="@dimen/customHalfMargin"
-            android:paddingEnd="@dimen/customMargin" />
+            android:hint="Headphones"
+            android:paddingEnd="@dimen/customMargin"
+            android:paddingRight="@dimen/customMargin" />
     </LinearLayout>
 
     <!-- Price category -->
@@ -56,12 +56,12 @@
         <EditText
             android:id="@+id/edit_price"
             style="@style/EditorFieldStyle"
-            android:hint="30"
             android:layout_marginLeft="@dimen/customHalfMargin"
-            android:paddingRight="@dimen/customMargin"
             android:layout_marginStart="@dimen/customHalfMargin"
+            android:hint="30"
             android:inputType="number"
-            android:paddingEnd="@dimen/customMargin" />
+            android:paddingEnd="@dimen/customMargin"
+            android:paddingRight="@dimen/customMargin" />
     </LinearLayout>
 
     <!-- Quantity category -->
@@ -78,8 +78,9 @@
 
         <!-- Input field -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <!-- Quantity drop-down spinner -->
@@ -108,12 +109,12 @@
         <EditText
             android:id="@+id/edit_supplier_name"
             style="@style/EditorFieldStyle"
-            android:hint="Bosco"
             android:layout_marginLeft="@dimen/customHalfMargin"
-            android:paddingRight="@dimen/customMargin"
             android:layout_marginStart="@dimen/customHalfMargin"
+            android:hint="Bosco"
             android:inputType="text"
-            android:paddingEnd="@dimen/customMargin" />
+            android:paddingEnd="@dimen/customMargin"
+            android:paddingRight="@dimen/customMargin" />
     </LinearLayout>
 
     <!-- Supplier Phone Number category -->
@@ -132,12 +133,12 @@
         <EditText
             android:id="@+id/edit_phone_number"
             style="@style/EditorFieldStyle"
-            android:hint="+49 123456789"
             android:layout_marginLeft="@dimen/customHalfMargin"
-            android:paddingRight="@dimen/customMargin"
             android:layout_marginStart="@dimen/customHalfMargin"
+            android:hint="+49 123456789"
             android:inputType="phone"
-            android:paddingEnd="@dimen/customMargin" />
+            android:paddingEnd="@dimen/customMargin"
+            android:paddingRight="@dimen/customMargin" />
     </LinearLayout>
 
 </LinearLayout>
