@@ -27,15 +27,13 @@
         <!-- Label -->
         <TextView
             style="@style/CategoryStyle"
-            android:text="Product Name" />
+            android:text="@string/product_name" />
 
         <!-- Weight field -->
         <EditText
             android:id="@+id/edit_name"
             style="@style/EditorFieldStyle"
-            android:layout_marginLeft="@dimen/customHalfMargin"
-            android:layout_marginStart="@dimen/customHalfMargin"
-            android:hint="Headphones"
+            android:hint="@string/hint_product_name"
             android:paddingEnd="@dimen/customMargin"
             android:paddingRight="@dimen/customMargin" />
     </LinearLayout>
@@ -50,15 +48,13 @@
         <!-- Label -->
         <TextView
             style="@style/CategoryStyle"
-            android:text="Price" />
+            android:text="@string/product_price" />
 
         <!-- Price field -->
         <EditText
             android:id="@+id/edit_price"
             style="@style/EditorFieldStyle"
-            android:layout_marginLeft="@dimen/customHalfMargin"
-            android:layout_marginStart="@dimen/customHalfMargin"
-            android:hint="30"
+            android:hint="@string/hint_product_price"
             android:inputType="number"
             android:paddingEnd="@dimen/customMargin"
             android:paddingRight="@dimen/customMargin" />
@@ -74,23 +70,14 @@
         <!-- Label -->
         <TextView
             style="@style/CategoryStyle"
-            android:text=" Quantity" />
+            android:text="@string/product_quantity" />
 
-        <!-- Input field -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:orientation="vertical">
-
-            <!-- Quantity drop-down spinner -->
-            <Spinner
-                android:id="@+id/spinner_quantity"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:paddingRight="@dimen/customMargin"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
+        <!-- Price field -->
+        <EditText
+            android:id="@+id/edit_quantity"
+            style="@style/EditorFieldStyle"
+            android:hint="@string/hint_product_quantity"
+            android:inputType="number" />
     </LinearLayout>
 
     <!-- Supplier Name -->
@@ -103,18 +90,14 @@
         <!-- Label -->
         <TextView
             style="@style/CategoryStyle"
-            android:text="Supplier Name" />
+            android:text="@string/product_supplier_name" />
 
         <!-- Name field -->
         <EditText
             android:id="@+id/edit_supplier_name"
             style="@style/EditorFieldStyle"
-            android:layout_marginLeft="@dimen/customHalfMargin"
-            android:layout_marginStart="@dimen/customHalfMargin"
-            android:hint="Bosco"
-            android:inputType="text"
-            android:paddingEnd="@dimen/customMargin"
-            android:paddingRight="@dimen/customMargin" />
+            android:hint="@string/hint_product_supplier_name"
+            android:inputType="text" />
     </LinearLayout>
 
     <!-- Supplier Phone Number category -->
@@ -127,18 +110,14 @@
         <!-- Label -->
         <TextView
             style="@style/CategoryStyle"
-            android:text="Phone Number" />
+            android:text="@string/product_supplier_phone" />
 
         <!-- Price field -->
         <EditText
             android:id="@+id/edit_phone_number"
             style="@style/EditorFieldStyle"
-            android:layout_marginLeft="@dimen/customHalfMargin"
-            android:layout_marginStart="@dimen/customHalfMargin"
-            android:hint="+49 123456789"
-            android:inputType="phone"
-            android:paddingEnd="@dimen/customMargin"
-            android:paddingRight="@dimen/customMargin" />
+            android:hint="@string/hint_product_supplier_phone"
+            android:inputType="phone" />
     </LinearLayout>
 
 </LinearLayout>

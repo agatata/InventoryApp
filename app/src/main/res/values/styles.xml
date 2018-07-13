@@ -24,8 +24,28 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">2</item>
+        <item name="android:layout_marginLeft">@dimen/customHalfMargin</item>
+        <item name="android:layout_marginRight">@dimen/customHalfMargin</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    </style>
+
+    <!-- Style for a list item - product's name -->
+    <style name="ListItemNameStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <!-- Style for a list item - product's details -->
+    <style name="ListItemDetailStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 
 </resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/customMargin">
+
+    <TextView
+        android:id="@+id/list_item_name"
+        style="@style/ListItemNameStyle"
+        tools:text="Headphones" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/ListItemDetailStyle"
+                android:text="@string/list_item_price"
+                tools:text="Price: " />
+
+            <TextView
+                android:id="@+id/list_item_price"
+                style="@style/ListItemDetailStyle"
+                android:layout_marginLeft="@dimen/miniMargin"
+                android:layout_marginStart="@dimen/miniMargin"
+                tools:text="30" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/ListItemDetailStyle"
+                android:text="@string/list_item_quantity"
+                tools:text="Quantity: " />
+
+            <TextView
+                android:id="@+id/list_item_quantity"
+                style="@style/ListItemDetailStyle"
+                android:layout_marginLeft="@dimen/miniMargin"
+                android:layout_marginStart="@dimen/miniMargin"
+                tools:text="5" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

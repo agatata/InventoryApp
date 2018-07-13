@@ -2,7 +2,7 @@
 <resources>
     <!-- Custom margins -->
     <dimen name="customMargin">16dp</dimen>
-    <dimen name="customHalfMargin">16dp</dimen>
-
+    <dimen name="customHalfMargin">8dp</dimen>
+    <dimen name="miniMargin">4dp</dimen>
 </resources>
 

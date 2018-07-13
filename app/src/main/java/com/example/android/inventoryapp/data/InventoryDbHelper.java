@@ -11,7 +11,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
 
     // Database version.
-
     private static final int DATABASE_VERSION = 1;
 
     // Constructs a new instance of

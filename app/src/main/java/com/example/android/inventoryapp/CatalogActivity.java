@@ -1,28 +1,51 @@
 package com.example.android.inventoryapp;
 
+import android.app.LoaderManager;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.example.android.inventoryapp.data.InventoryContract;
-import com.example.android.inventoryapp.data.InventoryDbHelper;
 
-public class CatalogActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private InventoryDbHelper iDbHelper;
+public class CatalogActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.list)
+    ListView itemsListView;
+    @BindView(R.id.empty_view)
+    View emptyView;
+
+    /** Identifier for the pet data loader */
+    private static final int PRODUCT_LOADER = 0;
+
+    /** Adapter for the ListView */
+    InventoryCursorAdapter cursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
+        ButterKnife.bind(this);
 
         // Setup FAB to open EditorActivity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -31,85 +54,86 @@ public class CatalogActivity extends AppCompatActivity {
             }
         });
 
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        iDbHelper = new InventoryDbHelper(this);
+        // Set empty view on the ListView, so that it only shows when the list has 0 items.
+        itemsListView.setEmptyView(emptyView);
+
+        // Setup an Adapter.
+        // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
+        cursorAdapter = new InventoryCursorAdapter(this, null);
+        itemsListView.setAdapter(cursorAdapter);
+
+        // Setup the item click listener
+        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // Create new intent to go to {@link EditorActivity}
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                // Form and set the content URI that represents the specific item.
+                Uri currentPetUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, id);
+                intent.setData(currentPetUri);
+                startActivity(intent);
+            }
+        });
+
+        // Kick off the loader
+        getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
+    }
+
+
+    /**
+     * Helper method to delete all pets in the database.
+     */
+    private void deleteAllPets() {
+        int rowsDeleted = getContentResolver().delete(InventoryContract.InventoryEntry.CONTENT_URI, null, null);
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu options from the res/menu/menu_catalog.xml file.
+        // This adds menu items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_catalog, menu);
+        return true;
     }
 
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the database.
-     */
-    private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = iDbHelper.getReadableDatabase();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete_all_entries:
+                deleteAllPets();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-        // Define a projection that specifies which columns from the database will be used
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // Define a projection that specifies the columns from the table.
         String[] projection = {
                 InventoryContract.InventoryEntry._ID,
                 InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME,
-                InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE,
                 InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY,
-                InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME,
-                InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER,
-        };
+                InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE};
 
-        // Perform a query on the table
-        Cursor cursor = db.query(
-                InventoryContract.InventoryEntry.TABLE_NAME,   // The table to query
-                projection,                     // The columns to return
-                null,                  // The columns for the WHERE clause
-                null,               // The values for the WHERE clause
-                null,                   // Don't group the rows
-                null,                   // Don't filter by row groups
-                null);                  // The sort order
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,                   // Parent activity context
+                InventoryContract.InventoryEntry.CONTENT_URI,   // Provider content URI to query
+                projection,                                     // Columns to include in the resulting Cursor
+                null,                                  // No selection clause
+                null,                              // No selection arguments
+                null);                                // Default sort order
+    }
 
-        TextView displayView = findViewById(R.id.text_view_list);
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Update InventoryCursorAdapter with this new cursor containing updated pet data
+        cursorAdapter.swapCursor(data);
+    }
 
-        try {
-            // Create a header
-            displayView.append(
-                    InventoryContract.InventoryEntry._ID + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER + "\n");
-
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY);
-            int supplierColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);
-            int phoneColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                int currentPrice = cursor.getInt(priceColumnIndex);
-                int currentQuantity = cursor.getInt(quantityColumnIndex);
-                String currentSupplierName = cursor.getString(supplierColumnIndex);
-                String currentPhoneNumber = cursor.getString(phoneColumnIndex);
-
-                // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append(("\n" + currentID + " - " +
-                        currentName + " - " +
-                        currentPrice + " - " +
-                        currentQuantity + " - " +
-                        currentSupplierName + " - " +
-                        currentPhoneNumber));
-            }
-        } finally {
-            cursor.close();
-        }
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // Callback called when the data needs to be deleted
+        cursorAdapter.swapCursor(null);
     }
 
 }
