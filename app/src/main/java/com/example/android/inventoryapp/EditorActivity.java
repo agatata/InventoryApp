@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -42,6 +43,11 @@ public class EditorActivity extends AppCompatActivity implements
     EditText supplierNameEditText;
     @BindView(R.id.edit_phone_number)
     EditText phoneNumberEditText;
+    @BindView(R.id.edit_quantity_decrease)
+    Button quantityDecreaseButton;
+    @BindView(R.id.edit_quantity_increase)
+    Button quantityIncreaseButton;
+
     /**
      * Content URI for the existing product (null if it's a new pet)
      */
@@ -50,6 +56,11 @@ public class EditorActivity extends AppCompatActivity implements
      * Boolean flag that keeps track of whether the product has been edited
      */
     private boolean productHasChanged = false;
+
+    /**
+     * int for quantity check
+     */
+    private int givenQuantity;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
@@ -69,8 +80,6 @@ public class EditorActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_editor);
         ButterKnife.bind(this);
 
-        // Examine the intent that was used to launch this activity,
-        // in order to figure out if we're creating a new pet or editing an existing one.
         Intent intent = getIntent();
         currentProductUri = intent.getData();
 
@@ -93,6 +102,46 @@ public class EditorActivity extends AppCompatActivity implements
         quantityEditText.setOnTouchListener(touchListener);
         supplierNameEditText.setOnTouchListener(touchListener);
         phoneNumberEditText.setOnTouchListener(touchListener);
+        quantityIncreaseButton.setOnTouchListener(touchListener);
+        quantityIncreaseButton.setOnTouchListener(touchListener);
+
+
+
+        //Decrease quantity of products
+        quantityDecreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String quantity = quantityEditText.getText().toString();
+                if (TextUtils.isEmpty(quantity)) {
+                    quantityEditText.setText("0");
+                } else {
+                    givenQuantity = Integer.parseInt(quantity);
+                    //To validate if quantity is greater than 0
+                    if (givenQuantity >= 1) {
+                        quantityEditText.setText(String.valueOf(givenQuantity - 1));
+                    } else {
+                        Toast.makeText(EditorActivity.this, R.string.editor_quantity_less_than_zero, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        //Increase quantity of products
+       quantityIncreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String quantity = quantityEditText.getText().toString();
+                if (TextUtils.isEmpty(quantity)) {
+                    quantityEditText.setText("0");
+                } else {
+                    givenQuantity = Integer.parseInt(quantity);
+                    quantityEditText.setText(String.valueOf(givenQuantity + 1));
+                }
+
+            }
+        });
+
     }
 
     @Override
@@ -121,7 +170,6 @@ public class EditorActivity extends AppCompatActivity implements
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 saveItem();
-                finish();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
@@ -158,18 +206,26 @@ public class EditorActivity extends AppCompatActivity implements
         // Use trim to eliminate leading or trailing white space
         String nameString = nameEditText.getText().toString().trim();
         String priceString = priceEditText.getText().toString().trim();
-        int price = Integer.parseInt(priceString);
         String quantityString = quantityEditText.getText().toString().trim();
         String supplierNameString = supplierNameEditText.getText().toString().trim();
         String supplierPhoneNumberString = phoneNumberEditText.getText().toString().trim();
 
         // Check if this is supposed to be a new item
         // and check if all the fields in the editor are blank
-        if (currentProductUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) &&
-                TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierNameString)
-                && TextUtils.isEmpty(supplierPhoneNumberString)) {
-            Toast.makeText(this, getString(R.string.editor_all_fields_blank),
+        if (currentProductUri == null && TextUtils.isEmpty(nameString) &&
+                TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString) &&
+                TextUtils.isEmpty(supplierNameString) && TextUtils.isEmpty(supplierPhoneNumberString)) {
+            return;
+        } else if (TextUtils.isEmpty(nameString)) {
+            Toast.makeText(this, getString(R.string.editor_empty_name),
+                    Toast.LENGTH_SHORT).show();
+          return;
+        }else if (TextUtils.isEmpty(priceString)) {
+            Toast.makeText(this, getString(R.string.editor_empty_price),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(supplierNameString)) {
+            Toast.makeText(this, getString(R.string.editor_empty_supplier),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -177,6 +233,7 @@ public class EditorActivity extends AppCompatActivity implements
         // Create a ContentValues object
         ContentValues values = new ContentValues();
         values.put(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME, nameString);
+        int price = Integer.parseInt(priceString);
         values.put(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE, price);
         // If the quantity is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
@@ -221,8 +278,8 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
+        finish();
     }
-
 
     /**
      * DELETE ITEM - delete confirmation dialog and deleteItem method
@@ -346,7 +403,6 @@ public class EditorActivity extends AppCompatActivity implements
         // Proceed with moving to the first row of the cursor and reading data from it
         // (This should be the only row in the cursor)
         if (cursor.moveToFirst()) {
-
             // Find the proper columns of product attributes
             int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
             int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE);

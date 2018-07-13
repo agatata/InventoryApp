@@ -30,6 +30,17 @@
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
 
+    <!-- Style for a Button in the editor -->
+    <style name="EditorButtonStyle">
+        <item name="android:layout_height">42dp</item>
+        <item name="android:layout_width">42dp</item>
+        <item name="android:layout_marginLeft">@dimen/customHalfMargin</item>
+        <item name="android:layout_marginRight">@dimen/customHalfMargin</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    </style>
+
     <!-- Style for a list item - product's name -->
     <style name="ListItemNameStyle">
         <item name="android:layout_height">wrap_content</item>
