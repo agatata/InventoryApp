@@ -1,12 +1,19 @@
 package com.example.android.inventoryapp;
 
+import android.annotation.SuppressLint;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.android.inventoryapp.data.InventoryContract;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,23 +36,40 @@ public class InventoryCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
 
         // Find the columns of pet attributes that we're interested in
+        int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
         int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY);
 
-        // Read the pet attributes from the Cursor for the current pet
+        // Read the pet attributes from the Cursor for the current item
+        final int productId = cursor.getInt(idColumnIndex);
         String productName = cursor.getString(nameColumnIndex);
         int productPrice = cursor.getInt(priceColumnIndex);
-        int productQuantity = cursor.getInt(quantityColumnIndex);
+        final int productQuantity = cursor.getInt(quantityColumnIndex);
 
         // Update the TextViews with the attributes for the current item
         holder.nameTextView.setText(productName);
         holder.priceTextView.setText(Integer.toString(productPrice));
         holder.quantityTextView.setText(Integer.toString(productQuantity));
+
+        // Button decreasing quantity of product
+        holder.sellButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (productQuantity > 0) {
+                    int newQuantity = productQuantity - 1;
+                    Uri quantityUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, productId);
+                    ContentValues values = new ContentValues();
+                    values.put(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY, newQuantity);
+                    context.getContentResolver().update(quantityUri, values, null, null);
+                } else {
+                    Toast.makeText(context, "This item is out of stock", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     static class ViewHolder {
@@ -55,6 +79,8 @@ public class InventoryCursorAdapter extends CursorAdapter {
         TextView priceTextView;
         @BindView(R.id.list_item_quantity)
         TextView quantityTextView;
+        @BindView(R.id.list_item_sell_btn)
+        Button sellButton;
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

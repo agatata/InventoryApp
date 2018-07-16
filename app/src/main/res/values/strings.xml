@@ -32,6 +32,9 @@
     <string name="editor_quantity_less_than_zero">Quantity cannot be less than zero</string>
 
     <!-- Toast message in editor when the product has no given name [CHAR LIMIT=NONE] -->
+    <string name="editor_all_empty">Add the data</string>
+
+    <!-- Toast message in editor when the product has no given name [CHAR LIMIT=NONE] -->
     <string name="editor_empty_name">Add the name</string>
 
     <!-- Toast message in editor when the product has no given price[CHAR LIMIT=NONE] -->

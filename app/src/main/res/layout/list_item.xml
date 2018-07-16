@@ -5,8 +5,14 @@
     android:id="@+id/list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="@dimen/customMargin">
+
+<LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/list_item_name"
@@ -58,5 +64,9 @@
         </LinearLayout>
 
     </RelativeLayout>
-
+</LinearLayout>
+    <Button
+        android:id="@+id/list_item_sell_btn"
+        style="@style/ListItemButtonStyle"
+        android:text="sell"/>
 </LinearLayout>

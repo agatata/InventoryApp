@@ -215,6 +215,8 @@ public class EditorActivity extends AppCompatActivity implements
         if (currentProductUri == null && TextUtils.isEmpty(nameString) &&
                 TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString) &&
                 TextUtils.isEmpty(supplierNameString) && TextUtils.isEmpty(supplierPhoneNumberString)) {
+            Toast.makeText(this, getString(R.string.editor_all_empty),
+                    Toast.LENGTH_SHORT).show();
             return;
         } else if (TextUtils.isEmpty(nameString)) {
             Toast.makeText(this, getString(R.string.editor_empty_name),
