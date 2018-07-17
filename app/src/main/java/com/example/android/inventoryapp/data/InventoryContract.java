@@ -10,8 +10,6 @@ public final class InventoryContract {
     // give it an empty constructor.
     private InventoryContract() {}
 
-
-
     // The "Content authority" is a name for the entire content provider.
     public static final String CONTENT_AUTHORITY = "com.example.android.inventoryapp";
 

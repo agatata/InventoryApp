@@ -47,6 +47,8 @@ public class EditorActivity extends AppCompatActivity implements
     Button quantityDecreaseButton;
     @BindView(R.id.edit_quantity_increase)
     Button quantityIncreaseButton;
+    @BindView(R.id.edit_order_button)
+    Button orderButton;
 
     /**
      * Content URI for the existing product (null if it's a new pet)
@@ -61,6 +63,11 @@ public class EditorActivity extends AppCompatActivity implements
      * int for quantity check
      */
     private int givenQuantity;
+
+    /**
+     * int for phone number check
+     */
+    private String givenPhoneNumber;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
@@ -88,6 +95,7 @@ public class EditorActivity extends AppCompatActivity implements
             setTitle(getString(R.string.editor_activity_title_new_item));
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             invalidateOptionsMenu();
+            orderButton.setVisibility(View.GONE);
         } else {
             setTitle(getString(R.string.editor_activity_title_edit_item));
 
@@ -96,7 +104,6 @@ public class EditorActivity extends AppCompatActivity implements
             getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
 
-        //TODO override performClick
         nameEditText.setOnTouchListener(touchListener);
         priceEditText.setOnTouchListener(touchListener);
         quantityEditText.setOnTouchListener(touchListener);
@@ -104,8 +111,6 @@ public class EditorActivity extends AppCompatActivity implements
         phoneNumberEditText.setOnTouchListener(touchListener);
         quantityIncreaseButton.setOnTouchListener(touchListener);
         quantityIncreaseButton.setOnTouchListener(touchListener);
-
-
 
         //Decrease quantity of products
         quantityDecreaseButton.setOnClickListener(new View.OnClickListener() {
@@ -127,10 +132,9 @@ public class EditorActivity extends AppCompatActivity implements
         });
 
         //Increase quantity of products
-       quantityIncreaseButton.setOnClickListener(new View.OnClickListener() {
+        quantityIncreaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String quantity = quantityEditText.getText().toString();
                 if (TextUtils.isEmpty(quantity)) {
                     quantityEditText.setText("0");
@@ -142,8 +146,22 @@ public class EditorActivity extends AppCompatActivity implements
             }
         });
 
-    }
 
+    // Implementing orderButton funcionality
+        orderButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String phoneNumber = phoneNumberEditText.getText().toString();
+            if (TextUtils.isEmpty(phoneNumber)) {
+                Toast.makeText(EditorActivity.this, R.string.editor_phone_number_empty, Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null));
+                startActivity(intent);
+            }
+        }
+    });
+
+}
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_editor.xml file.

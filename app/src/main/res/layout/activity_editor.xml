@@ -35,7 +35,7 @@
             style="@style/EditorFieldStyle"
             android:hint="@string/hint_product_name"
             android:paddingEnd="@dimen/customMargin"
-            android:paddingRight="@dimen/customMargin" />
+            android:paddingRight="@dimen/customMargin"/>
     </LinearLayout>
 
     <!-- Price category -->
@@ -87,22 +87,21 @@
             <!-- Price field -->
             <EditText
                 android:id="@+id/edit_quantity"
-                android:layout_toRightOf="@id/edit_quantity_decrease"
-                android:layout_toEndOf="@id/edit_quantity_decrease"
                 style="@style/EditorFieldStyle"
                 android:layout_width="wrap_content"
-                android:padding="@dimen/customHalfMargin"
                 android:layout_margin="0dp"
+                android:layout_toEndOf="@id/edit_quantity_decrease"
+                android:layout_toRightOf="@id/edit_quantity_decrease"
                 android:gravity="center"
                 android:hint="@string/hint_product_quantity"
                 android:inputType="number"
-                />
+                android:padding="@dimen/customHalfMargin" />
             <!-- Increase Button -->
             <Button
                 android:id="@+id/edit_quantity_increase"
-                android:layout_toRightOf="@id/edit_quantity"
-                android:layout_toEndOf="@id/edit_quantity"
                 style="@style/EditorButtonStyle"
+                android:layout_toEndOf="@id/edit_quantity"
+                android:layout_toRightOf="@id/edit_quantity"
                 android:text="+" />
 
         </RelativeLayout>
@@ -147,5 +146,15 @@
             android:hint="@string/hint_product_supplier_phone"
             android:inputType="phone" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/edit_order_button"
+        style="@style/EditorButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="72dp"
+        android:text="@string/editor_activity_order_button"
+        android:textAllCaps="true" />
 
 </LinearLayout>

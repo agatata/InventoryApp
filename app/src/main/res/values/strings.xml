@@ -43,6 +43,9 @@
     <!-- Toast message in editor when the product has no given supplier's name [CHAR LIMIT=NONE] -->
     <string name="editor_empty_supplier">Add the supplier</string>
 
+    <!-- Toast message after Order button was clicked when the product has no given phone number[CHAR LIMIT=NONE] -->
+    <string name="editor_phone_number_empty">There is no given phone number</string>
+
     <!-- Toast message in editor when new product has been successfully inserted [CHAR LIMIT=NONE] -->
     <string name="editor_insert_item_successful">Product saved</string>
 
@@ -115,5 +118,6 @@
 
     <string name="list_item_quantity">Quantity: </string>
     <string name="list_item_price">Price: </string>
+    <string name="editor_activity_order_button">order</string>
 
 </resources>

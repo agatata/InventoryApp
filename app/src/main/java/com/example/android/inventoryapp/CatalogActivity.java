@@ -32,12 +32,15 @@ public class CatalogActivity extends AppCompatActivity implements
     ListView itemsListView;
     @BindView(R.id.empty_view)
     View emptyView;
-
+    
     /** Identifier for the pet data loader */
     private static final int PRODUCT_LOADER = 0;
 
     /** Adapter for the ListView */
     InventoryCursorAdapter cursorAdapter;
+
+    /** For debugging purposes */
+    private static final String TAG = "CatalogActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +72,8 @@ public class CatalogActivity extends AppCompatActivity implements
                 // Create new intent to go to {@link EditorActivity}
                 Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
                 // Form and set the content URI that represents the specific item.
-                Uri currentPetUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, id);
-                intent.setData(currentPetUri);
+                Uri currentProductUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, id);
+                intent.setData(currentProductUri);
                 startActivity(intent);
             }
         });
@@ -79,14 +82,6 @@ public class CatalogActivity extends AppCompatActivity implements
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
 
-
-    /**
-     * Helper method to delete all pets in the database.
-     */
-    private void deleteAllPets() {
-        int rowsDeleted = getContentResolver().delete(InventoryContract.InventoryEntry.CONTENT_URI, null, null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,10 +95,18 @@ public class CatalogActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_all_entries:
-                deleteAllPets();
+                deleteAllProducts();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Helper method to delete all products in the database.
+     */
+    private void deleteAllProducts() {
+        int rowsDeleted = getContentResolver().delete(InventoryContract.InventoryEntry.CONTENT_URI, null, null);
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from inventory database");
     }
 
     @Override

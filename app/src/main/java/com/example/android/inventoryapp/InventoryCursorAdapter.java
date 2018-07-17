@@ -1,6 +1,5 @@
 package com.example.android.inventoryapp;
 
-import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -20,7 +19,7 @@ import butterknife.ButterKnife;
 
 public class InventoryCursorAdapter extends CursorAdapter {
 
-    public InventoryCursorAdapter(Context context, Cursor c) {
+    InventoryCursorAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
 
@@ -45,10 +44,11 @@ public class InventoryCursorAdapter extends CursorAdapter {
         int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY);
 
+
         // Read the pet attributes from the Cursor for the current item
         final int productId = cursor.getInt(idColumnIndex);
-        String productName = cursor.getString(nameColumnIndex);
-        int productPrice = cursor.getInt(priceColumnIndex);
+        final String productName = cursor.getString(nameColumnIndex);
+        final int productPrice = cursor.getInt(priceColumnIndex);
         final int productQuantity = cursor.getInt(quantityColumnIndex);
 
         // Update the TextViews with the attributes for the current item
@@ -56,7 +56,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         holder.priceTextView.setText(Integer.toString(productPrice));
         holder.quantityTextView.setText(Integer.toString(productQuantity));
 
-        // Button decreasing quantity of product
+        //Implementing the functionality for the "sell" button
         holder.sellButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (productQuantity > 0) {
@@ -81,7 +81,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         TextView quantityTextView;
         @BindView(R.id.list_item_sell_btn)
         Button sellButton;
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
