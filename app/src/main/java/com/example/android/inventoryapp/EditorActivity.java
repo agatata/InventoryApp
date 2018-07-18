@@ -64,10 +64,6 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private int givenQuantity;
 
-    /**
-     * int for phone number check
-     */
-    private String givenPhoneNumber;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
