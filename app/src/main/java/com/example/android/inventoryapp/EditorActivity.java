@@ -248,6 +248,10 @@ public class EditorActivity extends AppCompatActivity implements
             Toast.makeText(this, getString(R.string.editor_empty_supplier),
                     Toast.LENGTH_SHORT).show();
             return;
+        } else if (TextUtils.isEmpty(supplierPhoneNumberString)) {
+            Toast.makeText(this, getString(R.string.editor_empty_phone_number),
+                    Toast.LENGTH_SHORT).show();
+            return;
         }
 
         // Create a ContentValues object

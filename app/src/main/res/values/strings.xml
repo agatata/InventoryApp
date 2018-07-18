@@ -4,7 +4,7 @@
     <!-- Label for editor activity [CHAR LIMIT=20] -->
     <string name="editor_activity_label">New Item</string>
 
-    <!-- Label for overflow menu option that deletes all pet data in the app [CHAR LIMIT=20] -->
+    <!-- Label for overflow menu option that deletes all product data in the app [CHAR LIMIT=20] -->
     <string name="action_delete_all_entries">Delete All Entries</string>
 
     <!-- Title text for the empty view [CHAR LIMIT=50] -->
@@ -13,7 +13,7 @@
     <!-- Subtitle text for the empty view [CHAR LIMIT=50] -->
     <string name="empty_view_subtitle_text">Add the first item</string>
 
-    <!-- Title for the activity to add a new pet [CHAR LIMIT=20] -->
+    <!-- Title for the activity to add a new item [CHAR LIMIT=20] -->
     <string name="editor_activity_title_new_item">Add a Product</string>
 
     <!-- Title for the activity to edit an existing item [CHAR LIMIT=20] -->
@@ -42,6 +42,9 @@
 
     <!-- Toast message in editor when the product has no given supplier's name [CHAR LIMIT=NONE] -->
     <string name="editor_empty_supplier">Add the supplier</string>
+
+    <!-- Toast message in editor when the product has no given supplier's phone number [CHAR LIMIT=NONE] -->
+    <string name="editor_empty_phone_number">Add the phone number</string>
 
     <!-- Toast message after Order button was clicked when the product has no given phone number[CHAR LIMIT=NONE] -->
     <string name="editor_phone_number_empty">There is no given phone number</string>
@@ -112,7 +115,7 @@
     <!-- The title for supplier's name field in the editor [CHAR LIMIT=30] -->
     <string name="product_supplier_phone">Phone Number</string>
 
-    <!-- Text hint for supplier's name field in the editor [CHAR LIMIT=30] -->
+    <!-- Text hint for supplier's name field in the editor [CHAR LIMIT=20] -->
     <string name="hint_product_supplier_phone">+49 123456789</string>
 
 

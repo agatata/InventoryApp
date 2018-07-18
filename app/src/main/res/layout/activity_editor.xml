@@ -29,13 +29,14 @@
             style="@style/CategoryStyle"
             android:text="@string/product_name" />
 
-        <!-- Weight field -->
+        <!-- Name field -->
         <EditText
             android:id="@+id/edit_name"
             style="@style/EditorFieldStyle"
             android:hint="@string/hint_product_name"
             android:paddingEnd="@dimen/customMargin"
-            android:paddingRight="@dimen/customMargin"/>
+            android:paddingRight="@dimen/customMargin"
+            android:maxLength="30"/>
     </LinearLayout>
 
     <!-- Price category -->
@@ -57,7 +58,8 @@
             android:hint="@string/hint_product_price"
             android:inputType="number"
             android:paddingEnd="@dimen/customMargin"
-            android:paddingRight="@dimen/customMargin" />
+            android:paddingRight="@dimen/customMargin"
+            android:maxLength="6" />
     </LinearLayout>
 
     <!-- Quantity category -->
@@ -95,6 +97,7 @@
                 android:gravity="center"
                 android:hint="@string/hint_product_quantity"
                 android:inputType="number"
+                android:maxLength="3"
                 android:padding="@dimen/customHalfMargin" />
             <!-- Increase Button -->
             <Button
@@ -124,7 +127,8 @@
             android:id="@+id/edit_supplier_name"
             style="@style/EditorFieldStyle"
             android:hint="@string/hint_product_supplier_name"
-            android:inputType="text" />
+            android:inputType="text"
+            android:maxLength="30"/>
     </LinearLayout>
 
     <!-- Supplier Phone Number category -->
@@ -144,7 +148,8 @@
             android:id="@+id/edit_phone_number"
             style="@style/EditorFieldStyle"
             android:hint="@string/hint_product_supplier_phone"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:maxLength="20"/>
     </LinearLayout>
 
     <Button

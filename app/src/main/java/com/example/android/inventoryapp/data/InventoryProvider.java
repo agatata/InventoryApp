@@ -134,10 +134,14 @@ public class InventoryProvider extends ContentProvider {
         // Check that the supplier's name is not null
         String supplierName = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);
         if (supplierName == null) {
-            throw new IllegalArgumentException("Product name requires a suppliers name");
+            throw new IllegalArgumentException("Product requires a suppliers name");
         }
 
-        // Supplier's phone number can be null
+        // Check that the supplier's phone number is not null
+        String supplierPhoneNumber = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+        if (supplierPhoneNumber == null) {
+            throw new IllegalArgumentException("Product requires a suppliers phone number");
+        }
 
         // Get writable database
         SQLiteDatabase database = dbHelper.getWritableDatabase();
@@ -209,7 +213,15 @@ public class InventoryProvider extends ContentProvider {
             // Check that the supplier's name is not null
             String supplierName = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);
             if (supplierName == null) {
-                throw new IllegalArgumentException("Product name requires a suppliers name");
+                throw new IllegalArgumentException("Product requires a suppliers name");
+            }  }
+
+        // Check if the key is present
+        if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER)) {
+            // Check that the supplier's phone number is not null
+            String supplierPhoneNumber = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            if (supplierPhoneNumber == null) {
+                throw new IllegalArgumentException("Product requires a suppliers phone number");
             }  }
 
             // Supplier's phone number can be null
