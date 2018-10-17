@@ -38,14 +38,14 @@ public class InventoryCursorAdapter extends CursorAdapter {
     public void bindView(View view, final Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
 
-        // Find the columns of pet attributes that we're interested in
+        // Find the columns of product attributes
         int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
         int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY);
 
 
-        // Read the pet attributes from the Cursor for the current item
+        // Read the product attributes from the Cursor for the current item
         final int productId = cursor.getInt(idColumnIndex);
         final String productName = cursor.getString(nameColumnIndex);
         final int productPrice = cursor.getInt(priceColumnIndex);
@@ -56,7 +56,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         holder.priceTextView.setText(Integer.toString(productPrice));
         holder.quantityTextView.setText(Integer.toString(productQuantity));
 
-        //Implementing the functionality for the "sell" button
+        //The functionality for the "sell" button
         holder.sellButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (productQuantity > 0) {

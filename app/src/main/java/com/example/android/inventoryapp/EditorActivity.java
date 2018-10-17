@@ -1,5 +1,6 @@
 package com.example.android.inventoryapp;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -8,20 +9,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.InventoryContract;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,10 +39,13 @@ import butterknife.ButterKnife;
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks <Cursor> {
 
-    /**
-     * Identifier for the pet data loader
-     */
+    private static final String LOG_TAG = EditorActivity.class.getSimpleName();
+
+    //Identifier for the product data loader
     private static final int EXISTING_PRODUCT_LOADER = 0;
+    //Identifier for pick image request
+    private static final int PICK_IMAGE_REQUEST = 1;
+
     @BindView(R.id.edit_name)
     EditText nameEditText;
     @BindView(R.id.edit_price)
@@ -49,25 +62,27 @@ public class EditorActivity extends AppCompatActivity implements
     Button quantityIncreaseButton;
     @BindView(R.id.edit_order_button)
     Button orderButton;
+    @BindView(R.id.add_photo_btn)
+    Button addPhotoButton;
+    @BindView(R.id.photo_image_view)
+    ImageView photoImageView;
 
-    /**
-     * Content URI for the existing product (null if it's a new pet)
-     */
+    // Content URI for the existing product (null if it's a new product)
     private Uri currentProductUri;
-    /**
-     * Boolean flag that keeps track of whether the product has been edited
-     */
+
+    // URI for added photo
+    private Uri photoUri;
+
+    // Boolean flag that keeps track of whether the product has been edited
     private boolean productHasChanged = false;
 
-    /**
-     * int for quantity check
-     */
+    //int for quantity check
     private int givenQuantity;
 
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
-     * the view, and we change the petHasChanged boolean to true.
+     * the view, and we change the productHasChanged boolean to true.
      */
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
@@ -107,6 +122,7 @@ public class EditorActivity extends AppCompatActivity implements
         phoneNumberEditText.setOnTouchListener(touchListener);
         quantityIncreaseButton.setOnTouchListener(touchListener);
         quantityIncreaseButton.setOnTouchListener(touchListener);
+        photoImageView.setOnTouchListener(touchListener);
 
         //Decrease quantity of products
         quantityDecreaseButton.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +142,6 @@ public class EditorActivity extends AppCompatActivity implements
                 }
             }
         });
-
         //Increase quantity of products
         quantityIncreaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,22 +157,37 @@ public class EditorActivity extends AppCompatActivity implements
             }
         });
 
-
-    // Implementing orderButton funcionality
-        orderButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            String phoneNumber = phoneNumberEditText.getText().toString();
-            if (TextUtils.isEmpty(phoneNumber)) {
-                Toast.makeText(EditorActivity.this, R.string.editor_phone_number_empty, Toast.LENGTH_SHORT).show();
-            } else {
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null));
-                startActivity(intent);
+        // addPhotoButton - Open Image Selector, in case of adding the first photo
+        addPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openImageSelector();
             }
-        }
-    });
+        });
+        // addPhotoButton - Open Image Selector, in case of photo's change
+        photoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openImageSelector();
+            }
+        });
 
-}
+        // Implementing orderButton functionality
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phoneNumber = phoneNumberEditText.getText().toString();
+                if (TextUtils.isEmpty(phoneNumber)) {
+                    Toast.makeText(EditorActivity.this, R.string.editor_phone_number_empty, Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null));
+                    startActivity(intent);
+                }
+            }
+        });
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_editor.xml file.
@@ -235,8 +265,8 @@ public class EditorActivity extends AppCompatActivity implements
         } else if (TextUtils.isEmpty(nameString)) {
             Toast.makeText(this, getString(R.string.editor_empty_name),
                     Toast.LENGTH_SHORT).show();
-          return;
-        }else if (TextUtils.isEmpty(priceString)) {
+            return;
+        } else if (TextUtils.isEmpty(priceString)) {
             Toast.makeText(this, getString(R.string.editor_empty_price),
                     Toast.LENGTH_SHORT).show();
             return;
@@ -264,10 +294,15 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
         values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumberString);
+        String photo;
+        if (photoUri != null) {
+            photo = String.valueOf(photoUri);
+            values.put(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PHOTO_ID, photo);
+        }
 
         // Determine if this is a new or existing product
         if (currentProductUri == null) {
-            // This is a new item, so insert a new pet into the provider,
+            // This is a new item, so insert a new product into the provider,
             // returning the content URI for the new product.
             Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, values);
 
@@ -395,15 +430,16 @@ public class EditorActivity extends AppCompatActivity implements
 
     @Override
     public Loader <Cursor> onCreateLoader(int i, Bundle bundle) {
-        // Since the editor shows all pet attributes, define a projection that contains
-        // all columns from the pet table
+        // Since the editor shows all items attributes, define a projection that contains
+        // all columns from the product table
         String[] projection = {
                 InventoryContract.InventoryEntry._ID,
                 InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME,
                 InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE,
                 InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY,
                 InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME,
-                InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
+                InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER,
+                InventoryContract.InventoryEntry.COLUMN_PRODUCT_PHOTO_ID};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -429,6 +465,7 @@ public class EditorActivity extends AppCompatActivity implements
             int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY);
             int supplierNameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);
             int supplierPhoneColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            int photoColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PHOTO_ID);
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
@@ -436,6 +473,8 @@ public class EditorActivity extends AppCompatActivity implements
             int quantity = cursor.getInt(quantityColumnIndex);
             String supplierName = cursor.getString(supplierNameColumnIndex);
             String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
+            String photo = cursor.getString(photoColumnIndex);
+
 
             // Update the views on the screen with the values from the database
             nameEditText.setText(name);
@@ -443,6 +482,10 @@ public class EditorActivity extends AppCompatActivity implements
             quantityEditText.setText(Integer.toString(quantity));
             supplierNameEditText.setText(supplierName);
             phoneNumberEditText.setText(supplierPhone);
+            if (photo != null) {
+                Uri photoUri = Uri.parse(photo);
+                photoImageView.setImageBitmap(getBitmapFromUri(photoUri));
+            }
         }
     }
 
@@ -454,5 +497,90 @@ public class EditorActivity extends AppCompatActivity implements
         quantityEditText.setText("");
         supplierNameEditText.setText("");
         phoneNumberEditText.setText("");
+    }
+
+    /**
+     * ADD PHOTO - pic the photo from external gallery and get its URI
+     * Thank to: https://github.com/crlsndrsjmnz/MyShareImageExample
+     * and Sudhir Khanger
+     */
+
+    // open image selector and set the file's type
+    public void openImageSelector() {
+        Intent photoIntent;
+        // create Intent depending on the API
+        if (Build.VERSION.SDK_INT < 19) {
+            photoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        } else {
+            photoIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            photoIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        }
+        photoIntent.setType("image/*");
+        startActivityForResult(Intent.createChooser(photoIntent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code READ_REQUEST_CODE.
+        // If the request code seen here doesn't match, it's the response to some other intent,
+        // and the below code shouldn't run at all.
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
+            //  contain documents URI in the return intent
+            if (resultData != null) {
+                photoUri = resultData.getData();
+                Log.i(LOG_TAG, "Uri: " + photoUri.toString());
+                photoImageView.setImageBitmap(getBitmapFromUri(photoUri));
+            }
+        } else {
+            Log.i(LOG_TAG, "Something doesn't work");
+            Toast.makeText(this, "Something doesn't work!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // getBitmapFromUri helper method
+    public Bitmap getBitmapFromUri(Uri uri) {
+        if (uri == null || uri.toString().isEmpty())
+            return null;
+        // Get the dimensions of the View
+        int targetW = photoImageView.getWidth();
+        int targetH = photoImageView.getHeight();
+        InputStream input = null;
+        try {
+            input = this.getContentResolver().openInputStream(uri);
+
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(input, null, bmOptions);
+            input.close();
+
+            int photoW = bmOptions.outWidth;
+            int photoH = bmOptions.outHeight;
+
+            // Determine how much to scale down the image
+            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaleFactor;
+            bmOptions.inPurgeable = true;
+
+            input = this.getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(input, null, bmOptions);
+            input.close();
+            return bitmap;
+
+        } catch (FileNotFoundException fne) {
+            Log.e(LOG_TAG, "Failed to load image.", fne);
+            return null;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Failed to load image.", e);
+            return null;
+        } finally {
+            try {
+                input.close();
+            } catch (IOException ioe) {}
+        }
     }
 }

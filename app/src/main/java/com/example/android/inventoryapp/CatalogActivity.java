@@ -32,7 +32,7 @@ public class CatalogActivity extends AppCompatActivity implements
     @BindView(R.id.empty_view)
     View emptyView;
     
-    /** Identifier for the pet data loader */
+    /** Identifier for the product data loader */
     private static final int PRODUCT_LOADER = 0;
 
     /** Adapter for the ListView */
@@ -60,7 +60,7 @@ public class CatalogActivity extends AppCompatActivity implements
         itemsListView.setEmptyView(emptyView);
 
         // Setup an Adapter.
-        // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
+        // There is no products data yet (until the loader finishes) so pass in null for the Cursor.
         cursorAdapter = new InventoryCursorAdapter(this, null);
         itemsListView.setAdapter(cursorAdapter);
 

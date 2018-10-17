@@ -17,7 +17,7 @@ public final class InventoryContract {
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
      * the content provider.
      */
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_INVENTORY = "inventory";
 
@@ -26,7 +26,7 @@ public final class InventoryContract {
      */
     public static final class InventoryEntry implements BaseColumns {
 
-        /** The content URI to access the pet data in the provider */
+        /** The content URI to access the products data in the provider */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_INVENTORY);
 
         /**
@@ -48,6 +48,7 @@ public final class InventoryContract {
         public final static String COLUMN_PRODUCT_QUANTITY = "quantity";
         public final static String COLUMN_SUPPLIER_NAME = "supplier";
         public final static String COLUMN_SUPPLIER_PHONE_NUMBER = "phone";
+        public final static String COLUMN_PRODUCT_PHOTO_ID = "photo";
 
     }
 

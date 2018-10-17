@@ -57,7 +57,7 @@ public class InventoryProvider extends ContentProvider {
         // Get readable database
         SQLiteDatabase database = dbHelper.getReadableDatabase();
 
-        // To hodl the result of the query
+        // To hold the result of the query
         Cursor cursor;
 
         // Figure out if the URI matcher can match the URI to a specific code
@@ -111,37 +111,34 @@ public class InventoryProvider extends ContentProvider {
      * Insert a product into the database with the given content values. Return the new content URI
      * for that specific row in the database.
      */
-
     private Uri insertItem(Uri uri, ContentValues values) {
         // Check that the name is not null
         String name = values.getAsString(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Product requires a name");
         }
-
         // Check that the price is not null and has the positive value
         Integer price = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE);
         if (price == null || price < 0) {
             throw new IllegalArgumentException("Product requires valid price");
         }
-
         // Check that the quantity is not null and has the positive value
         Integer quantity = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY);
         if (quantity == null || quantity < 0) {
             throw new IllegalArgumentException("Product requires valid quandity");
         }
-
         // Check that the supplier's name is not null
         String supplierName = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);
         if (supplierName == null) {
             throw new IllegalArgumentException("Product requires a suppliers name");
         }
-
         // Check that the supplier's phone number is not null
         String supplierPhoneNumber = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
         if (supplierPhoneNumber == null) {
             throw new IllegalArgumentException("Product requires a suppliers phone number");
         }
+
+        // Don't neet to check if photo is null (adding photos is not obligatory)
 
         // Get writable database
         SQLiteDatabase database = dbHelper.getWritableDatabase();
@@ -198,7 +195,6 @@ public class InventoryProvider extends ContentProvider {
                 throw new IllegalArgumentException("Product requires valid price");
             }
         }
-
         // Check if the key is present
         if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY)) {
             // Check that the quantity is not null and has the positive value
@@ -207,24 +203,23 @@ public class InventoryProvider extends ContentProvider {
                 throw new IllegalArgumentException("Product requires valid quantity");
             }
         }
-
         // Check if the key is present
         if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME)) {
             // Check that the supplier's name is not null
             String supplierName = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);
             if (supplierName == null) {
                 throw new IllegalArgumentException("Product requires a suppliers name");
-            }  }
-
+            }
+        }
         // Check if the key is present
         if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER)) {
             // Check that the supplier's phone number is not null
             String supplierPhoneNumber = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
             if (supplierPhoneNumber == null) {
                 throw new IllegalArgumentException("Product requires a suppliers phone number");
-            }  }
-
-            // Supplier's phone number can be null
+            }
+        }
+        // Don't neet to check if photo is null (adding photos is not obligatory)
 
             // For "sell" Button: check if the provided quantity is equal or greater than to 0
             Integer quantity = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY);

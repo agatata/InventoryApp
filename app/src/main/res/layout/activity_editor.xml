@@ -106,7 +106,6 @@
                 android:layout_toEndOf="@id/edit_quantity"
                 android:layout_toRightOf="@id/edit_quantity"
                 android:text="+" />
-
         </RelativeLayout>
     </LinearLayout>
 
@@ -152,13 +151,46 @@
             android:maxLength="20"/>
     </LinearLayout>
 
+    <!-- Products Photo category -->
+    <LinearLayout
+        android:id="@+id/container_product_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="Photo" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <!-- Add Photo Button -->
+            <Button
+                android:id="@+id/add_photo_btn"
+                style="@style/EditorButtonStyle"
+                android:text="+" />
+            <ImageView
+                android:id="@+id/photo_image_view"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:contentDescription="Photo of the product" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
     <Button
         android:id="@+id/edit_order_button"
         style="@style/EditorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="72dp"
+        android:layout_margin="@dimen/customMargin"
         android:text="@string/editor_activity_order_button"
         android:textAllCaps="true" />
 
